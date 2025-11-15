@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工业遗产改造游戏入口</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+        }
+        
+        header {
+            margin-bottom: 60px;
+        }
+        
+        h1 {
+            color: #4db8ff;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(77, 184, 255, 0.5);
+            animation: glow 3s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 15px rgba(77, 184, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 25px rgba(77, 184, 255, 0.8), 0 0 35px rgba(77, 184, 255, 0.6);
+            }
+        }
+        
+        .subtitle {
+            color: #a0d2ff;
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .game-selection {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .game-card {
+            background: rgba(30, 40, 50, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: #4db8ff;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .game-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4db8ff, #2a8fcc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .game-title {
+            color: #4db8ff;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .game-description {
+            color: #a0d2ff;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4db8ff, #2a8fcc);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(77, 184, 255, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(77, 184, 255, 0.5);
+        }
+        
+        .btn.disabled {
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+            cursor: not-allowed;
+        }
+        
+        .btn.disabled:hover {
+            transform: none;
+            box-shadow: 0 5px 15px rgba(127, 140, 141, 0.3);
+        }
+        
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .gear {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(77, 184, 255, 0.1);
+            border: 2px solid rgba(77, 184, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gear::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background: rgba(30, 40, 50, 0.8);
+            border: 2px solid rgba(77, 184, 255, 0.2);
+        }
+        
+        .gear::after {
+            content: '';
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            border-radius: 50%;
+            background: rgba(77, 184, 255, 0.5);
+        }
+        
+        .gear .tooth {
+            position: absolute;
+            width: 20%;
+            height: 40%;
+            background: rgba(77, 184, 255, 0.3);
+            top: -20%;
+            left: 40%;
+        }
+        
+        .gear .tooth:nth-child(2) {
+            transform: rotate(45deg);
+        }
+        
+        .gear .tooth:nth-child(3) {
+            transform: rotate(90deg);
+        }
+        
+        .gear .tooth:nth-child(4) {
+            transform: rotate(135deg);
+        }
+        
+        .gear .tooth:nth-child(5) {
+            transform: rotate(180deg);
+        }
+        
+        .gear .tooth:nth-child(6) {
+            transform: rotate(225deg);
+        }
+        
+        .gear .tooth:nth-child(7) {
+            transform: rotate(270deg);
+        }
+        
+        .gear .tooth:nth-child(8) {
+            transform: rotate(315deg);
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .factory {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, #1a2a3a, transparent);
+            z-index: 0;
+        }
+        
+        .factory-building {
+            position: absolute;
+            bottom: 0;
+            width: 80px;
+            background: #2a3a4a;
+            border-top: 5px solid #4db8ff;
+        }
+        
+        .factory-building:nth-child(1) {
+            height: 150px;
+            left: 10%;
+        }
+        
+        .factory-building:nth-child(2) {
+            height: 200px;
+            left: 25%;
+        }
+        
+        .factory-building:nth-child(3) {
+            height: 180px;
+            left: 40%;
+        }
+        
+        .factory-building:nth-child(4) {
+            height: 220px;
+            left: 55%;
+        }
+        
+        .factory-building:nth-child(5) {
+            height: 170px;
+            left: 70%;
+        }
+        
+        .factory-building:nth-child(6) {
+            height: 190px;
+            left: 85%;
+        }
+        
+        .factory-building .window {
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            background: rgba(77, 184, 255, 0.5);
+            left: 10px;
+        }
+        
+        .factory-building .window:nth-child(1) {
+            top: 20px;
+        }
+        
+        .factory-building .window:nth-child(2) {
+            top: 60px;
+        }
+        
+        .factory-building .window:nth-child(3) {
+            top: 100px;
+        }
+        
+        .smoke {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: smoke 5s infinite;
+        }
+        
+        @keyframes smoke {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(-50%) translateY(-200px) scale(2);
+                opacity: 0;
+            }
+        }
+        
+        footer {
+            margin-top: 60px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .game-selection {
+                gap: 20px;
+            }
+            
+            .game-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation">
+        <!-- 齿轮动画元素 -->
+        <div class="gear" style="width: 120px; height: 120px; top: 10%; left: 10%; animation: rotate 20s linear infinite;">
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+        </div>
+        
+        <div class="gear" style="width: 80px; height: 80px; top: 20%; right: 15%; animation: rotate 15s linear infinite reverse;">
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+        </div>
+        
+        <div class="gear" style="width: 60px; height: 60px; bottom: 30%; left: 20%; animation: rotate 12s linear infinite;">
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+            <div class="tooth"></div>
+        </div>
+        
+        <!-- 工厂轮廓 -->
+        <div class="factory">
+            <div class="factory-building">
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+            </div>
+            <div class="factory-building">
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+            </div>
+            <div class="factory-building">
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+            </div>
+            <div class="factory-building">
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="smoke"></div>
+            </div>
+            <div class="factory-building">
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+            </div>
+            <div class="factory-building">
+                <div class="window"></div>
+                <div class="window"></div>
+                <div class="window"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>工业遗产改造成功案例的探索与记忆配对游戏</h1>
+            <p class="subtitle">探索中国工业遗产的转型与新生，通过游戏了解工业建筑如何焕发新生命</p>
+        </header>
+        
+        <div class="game-selection">
+            <div class="game-card">
+                <div class="game-icon">🏭</div>
+                <h2 class="game-title">国营751厂</h2>
+                <p class="game-description">探索北京751厂从煤气厂到文化创意产业园的华丽转身，了解工业遗产如何与现代艺术完美融合。</p>
+                <a href="国营751厂.html" class="btn">开始探索</a>
+            </div>
+            
+            <div class="game-card">
+                <div class="game-icon">🏗️</div>
+                <h2 class="game-title">东郊记忆</h2>
+                <p class="game-description">走进成都红光电子管厂改造的东郊记忆，体验工业遗址如何转变为城市文化新地标。</p>
+                <a href="东郊记忆.html" class="btn">开始探索</a>
+            </div>
+            
+            <div class="game-card">
+                <div class="game-icon">🔮</div>
+                <h2 class="game-title">更多案例</h2>
+                <p class="game-description">我们正在开发更多精彩的工业遗产改造案例，敬请期待未来的更新内容。</p>
+                <button class="btn disabled">敬请期待</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>工业遗产改造综合体验 &copy; 2023 | 了解历史，创造未来</p>
+        </footer>
+    </div>
+</body>
+</html>
